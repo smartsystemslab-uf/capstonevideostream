@@ -1,0 +1,48 @@
+---
+# cmd: ansible-playbook -i hosts.txt playbook-pi.yml
+# cmd: Test Ping:  ansible pi_host -i hosts.txt -m ping
+#https://www.youtube.com/watch?v=MfoAb50Br94
+- name: Deploy Capture Stream On RPI
+  hosts: pi_host
+  remote_user: root
+
+  tasks:
+    - name: Install ffmpeg stuff and vim
+      become: yes
+      apt: name={{ item }} state=present
+      with_items:
+        - ffmpeg
+        - vim
+
+    - name: Create directory
+      file:
+        path: /home/pi/capstonescript
+        state: directory
+        owner: pi
+        group: pi
+        mode: 0775
+        
+    - name: Install Streaming Program
+      template: src={{item.src}} dest={{item.dest}}
+      with_items:
+        - {src: 'capstonevideostream/capturestream.py', dest: '/home/pi/capstonescript/capturestream.py' }
+        - {src: '__main__.py', dest: '/home/pi/capstonescript/__main__.py' }
+      notify:
+        - Restart capstream
+
+    - name: Install Service capture stream
+      become: yes
+      template: src='capstream.service' dest='/etc/systemd/system/capstream.service'
+
+    - name: start capstream
+      become: yes
+      command: systemctl start capstream
+
+    - name: Ensure capstream launches on boot
+      become: yes
+      command: systemctl enable capstream
+
+  handlers:
+    - name: Restart capstream
+      become: yes
+      command: systemctl restart capstream

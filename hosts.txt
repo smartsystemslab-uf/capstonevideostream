@@ -1,0 +1,7 @@
+[pi_host]
+192.168.1.2
+
+[all:vars]
+ansible_connection=ssh
+ansible_user=pi
+ansible_ssh_pass=capstone2018

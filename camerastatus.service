@@ -1,0 +1,22 @@
+[Unit]
+Description=Camera Status Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/ls
+WorkingDirectory=/home/pi/capstonescript
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+RestartSec=1800 # Each 30 min
+User=pi
+
+[Install]
+WantedBy=multi-user.target
+
+###### Script to create the service ###########
+# sudo cp capstream.service /etc/systemd/system/capstream.service
+# sudo systemctl start capstream.service
+## start automatically at the reboot
+# sudo systemctl enable capstream.service
+
