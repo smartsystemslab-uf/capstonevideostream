@@ -7,12 +7,26 @@
   remote_user: root
 
   tasks:
-    - name: Install ffmpeg stuff and vim
+    - name: Check if ffmpeg is installed
       become: yes
-      apt: name={{ item }} state=present
-      with_items:
-        - ffmpeg
-        - vim
+      shell: dpkg-query -W -f='${Status}' ffmpeg
+      register: is_ffmpeg_installed
+
+    - name: Install ffmpeg
+      become: yes
+      apt: name=ffmpeg state=present
+      when: is_ffmpeg_installed.stdout.find('no packages found') != -1
+
+    - name: Check if vim is installed
+      become: yes
+      shell: dpkg-query -W -f='${Status}' vim
+      register: is_vim_installed
+
+    - name: Install vim
+      become: yes
+      apt: name=vim state=present
+      when: is_vim_installed.stdout.find('no packages found') != -1
+      ignore_errors: True
 
     - name: Create directory
       file:
