@@ -37,7 +37,7 @@ class CaptureStream:
         mac_addr = ''.join(("%012X" % mac_addr)[i:i + 2] for i in range(0, 12, 2))
         rasp_cmd = "raspivid -w 1280 -h 720 -fps 25 -b 10000000 -vf -hf -t 0 -o - "
 
-        server_addr = "192.168.0.2"
+        server_addr = "192.168.1.11"
         ffmpeg_cmd = "ffmpeg -i - -vcodec copy -an -f rtsp -metadata title=test" + mac_addr + " rtsp://" + server_addr + ":554/flvplayback "
 
         print("the commandline is[rasp_cmd]: {}".format(rasp_cmd))
