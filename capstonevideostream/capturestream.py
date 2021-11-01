@@ -35,9 +35,10 @@ class CaptureStream:
         # SD: 1280 x 720
         mac_addr = get_mac()
         mac_addr = ''.join(("%012X" % mac_addr)[i:i + 2] for i in range(0, 12, 2))
-        rasp_cmd = "raspivid -w 1920 -h 1080 -fps 25 -b 10000000 -vf -hf -t 0 -o - "
+        rasp_cmd = "raspivid -w 1280 -h 720 -fps 25 -b 10000000 -vf -hf -t 0 -o - "
 
-        ffmpeg_cmd = "ffmpeg -i - -vcodec copy -an -f rtsp -metadata title=test" + mac_addr + " rtsp://192.168.1.3:554/flvplayback "
+        server_addr = "192.168.0.2"
+        ffmpeg_cmd = "ffmpeg -i - -vcodec copy -an -f rtsp -metadata title=test" + mac_addr + " rtsp://" + server_addr + ":554/flvplayback "
 
         print("the commandline is[rasp_cmd]: {}".format(rasp_cmd))
         print("the commandline is[ffmpeg_cmd]: {}".format(ffmpeg_cmd))

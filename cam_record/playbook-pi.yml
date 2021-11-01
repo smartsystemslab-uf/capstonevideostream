@@ -1,0 +1,26 @@
+---
+# cmd: ansible-playbook -i hosts.txt playbook-pi.yml --limit pi_host
+# cmd: Test Ping:  ansible pi_host -i hosts.txt -m ping
+#https://www.youtube.com/watch?v=MfoAb50Br94
+- name: Deploy Capture Script On RPI
+  hosts: pi_host
+  remote_user: pi
+
+
+  tasks:
+    - name: Create directory
+      file:
+        path: /home/pi/cam_record
+        state: directory
+        owner: pi
+        group: pi
+        mode: 0775
+        
+    - name: Install Image and Video Captured Script
+      template: src={{item.src}} dest={{item.dest}} mode={{item.mode}}
+      with_items:
+        - {src: 'capture_img.py', dest: '/home/pi/cam_record/capture_img.py', mode: '0775' }
+        - {src: 'capture_img_seq.py', dest: '/home/pi/cam_record/capture_img_seq.py', mode: '0775' }
+        - {src: 'capture_vid_seq.py', dest: '/home/pi/cam_record/capture_vid_seq.py', mode: '0775' }
+
+

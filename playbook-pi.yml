@@ -1,16 +1,27 @@
 ---
-# cmd: ansible-playbook -i hosts.txt playbook-pi.yml
+# cmd: ansible-playbook -i hosts.txt playbook-pi.yml --limit pi_host
 # cmd: Test Ping:  ansible pi_host -i hosts.txt -m ping
 #https://www.youtube.com/watch?v=MfoAb50Br94
 - name: Deploy Capture Stream On RPI
   hosts: pi_host
   remote_user: root
+  vars:
+    wifi:
+      ssid: "NETGEAR05"
+      password: aquaticearth905
+      key_mgmt: WPA-PSK
+
 
   tasks:
     - name: Check if ffmpeg is installed
       become: yes
       shell: dpkg-query -W -f='${Status}' ffmpeg
       register: is_ffmpeg_installed
+
+    - name: Put wifi config in place
+      become: yes
+      template: src=templates/wpa_supplicant.conf.template dest=/etc/wpa_supplicant/wpa_supplicant.conf  mode=0644
+      notify: reboot
 
     - name: Install ffmpeg
       become: yes
@@ -43,6 +54,12 @@
         - {src: '__main__.py', dest: '/home/pi/capstonescript/__main__.py' }
       notify:
         - Restart capstream
+        
+    - name: Install The IP Client
+      template: src={{item.src}} dest={{item.dest}}
+      with_items:
+        - {src: '/home/erman/immersion/IpDisco-Prj/ip_disco_client/ip_disc_client.py', dest: '/home/pi/IpDisco-Prj/ip_disco_client/ip_disc_client.py' }
+
 
     - name: Install Service capture stream
       become: yes
@@ -60,3 +77,20 @@
     - name: Restart capstream
       become: yes
       command: systemctl restart capstream
+    - name: reboot
+      become: yes
+      shell: sleep 2 && reboot
+      async: 1
+      poll: 0
+      ignore_errors: true
+      # command: shutdown -r now "Ansible updates triggered"
+
+
+
+
+
+
+
+
+
+
