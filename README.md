@@ -39,7 +39,7 @@ To read to able stream from the server, some udp port should be opened. The only
 - The second way is to allow all incomming udp communication to the server local address
 `sudo ufw allow from 192.168.1.0/24 to 192.168.1.11 proto udp`
 
-At this port, all cameras should be able to stream image to crtmpserver and the stream can be read with vlc. The link to stream has the this structure rtsp://\<server_address\>:554/test<\camera_mac_address\>. The camera mac address is the hex representation concatenated. ex: rtsp://127.0.0.1:554/testB827EB3C6B0A
+At this port, all cameras should be able to stream image to crtmpserver and the stream can be read with vlc. The link to stream has the this structure `rtsp://<server_address>:554/test<camera_mac_address>`. The camera mac address is the hex representation concatenated. ex: rtsp://127.0.0.1:554/testB827EB3C6B0A
 
 The ![IpDisco](http://dev.camertronix.com/Immersion-Grp/IpDisco-Prj) (Ip dicorvery module) module is a client-server module design to retrieved camera settings from the server side including the camera mac address to read the stream.
 
