@@ -1,0 +1,90 @@
+---
+# cmd: ansible-playbook -i nanohosts.txt playbook-nano.yml --limit nano_host -kK
+# cmd: Test Ping:  ansible nano_host -i nanohosts.txt -m ping
+#https://www.youtube.com/watch?v=MfoAb50Br94
+- name: Deploy Capture Stream On Jetson Nano
+  hosts: nano_host
+  remote_user: root
+  vars:
+    wifi:
+      ssid: "NETGEAR05"
+      password: aquaticearth905
+      key_mgmt: WPA-PSK
+
+
+  tasks:
+    - name: Check if ffmpeg is installed
+      become: yes
+      shell: dpkg-query -W -f='${Status}' ffmpeg
+      register: is_ffmpeg_installed
+
+    - name: Put wifi config in place
+      become: yes
+      template: src=templates/wpa_supplicant.conf.template dest=/etc/wpa_supplicant/wpa_supplicant.conf  mode=0644
+      notify: reboot
+
+    - name: Install ffmpeg
+      become: yes
+      apt: name=ffmpeg state=present
+      when: is_ffmpeg_installed.stdout.find('no packages found') != -1
+
+    - name: Check if vim is installed
+      become: yes
+      shell: dpkg-query -W -f='${Status}' vim
+      register: is_vim_installed
+
+    - name: Install vim
+      become: yes
+      apt: name=vim state=present
+      when: is_vim_installed.stdout.find('no packages found') != -1
+      ignore_errors: True
+
+    - name: Create directory
+      file:
+        path: /home/erman/capstonescript
+        state: directory
+        owner: erman
+        group: erman
+        mode: 0775
+        
+    - name: Install Streaming Program
+      template: src={{item.src}} dest={{item.dest}}
+      with_items:
+        - {src: 'capstonevideostream/capturenanostream.py', dest: '/home/erman/capstonescript/capturenanostream.py' }
+        - {src: '__main__.py', dest: '/home/erman/capstonescript/__main__.py' }
+      notify:
+        - Restart capstreamnano
+
+    - name: Install Service capture stream
+      become: yes
+      template: src='capstreamnano.service' dest='/etc/systemd/system/capstreamnano.service'
+
+    - name: start capstreamnano
+      become: yes
+      command: systemctl start capstreamnano
+
+    - name: Ensure capstreamnano launches on boot
+      become: yes
+      command: systemctl enable capstreamnano
+
+  handlers:
+    - name: Restart capstreamnano
+      become: yes
+      command: systemctl restart capstreamnano
+    - name: reboot
+      become: yes
+      shell: sleep 2 && reboot
+      async: 1
+      poll: 0
+      ignore_errors: true
+      # command: shutdown -r now "Ansible updates triggered"
+
+
+
+
+
+
+
+
+
+

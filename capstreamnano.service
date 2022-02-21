@@ -1,0 +1,22 @@
+[Unit]
+Description=Video Streaming Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 capturenanostream.py
+WorkingDirectory=/home/erman/capstonescript
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+RestartSec=30
+User=erman
+
+[Install]
+WantedBy=multi-user.target
+
+###### Script to create the service ###########
+# sudo cp capstream.service /etc/systemd/system/capstream.service
+# sudo systemctl start capstream.service
+## start automatically at the reboot
+# sudo systemctl enable capstream.service
+

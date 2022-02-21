@@ -1,0 +1,7 @@
+[nano_host]
+192.168.1.6
+
+[all:vars]
+ansible_connection=ssh
+ansible_user=erman
+ansible_ssh_pass=immersion!@#$
