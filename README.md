@@ -46,6 +46,19 @@ The ![IpDisco](http://dev.camertronix.com/Immersion-Grp/IpDisco-Prj) (Ip dicorve
 
 More about ![UFW here](https://help.ubuntu.com/community/UFW).
 
+## Install Ansible and sshpass
+### Install ansible
+`sudo apt install ansible`
+
+### Install sshpass
+`sudo apt install sshpass`
+
+### Test ansible
+`ansible nano_host -i nanohosts.txt -m ping`
+
+### Troubleshoot
+If a python virtual environment is activate by default, please deactivate it as ansible might be unable to launch
+
 ## Install and Configure the environment on Raspberry
 - To install the capstonevideostream to images and stream to the server, use the `playbook-pi.yml`
   cmd: `ansible-playbook -i hosts.txt playbook-pi.yml --limit pi_host_name`

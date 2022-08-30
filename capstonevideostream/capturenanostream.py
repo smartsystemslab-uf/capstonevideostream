@@ -92,7 +92,7 @@ class CaptureStream:
         mac_addr = get_mac()
         mac_addr = ''.join(("%012X" % mac_addr)[i:i + 2] for i in range(0, 12, 2))
 
-        server_addr = "192.168.1.11"
+        server_addr = "192.168.1.9"
 
         ffmpeg_path = 'ffmpeg'
         output_file = "rtsp://" + server_addr + ":554/flvplayback"
