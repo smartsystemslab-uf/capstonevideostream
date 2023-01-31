@@ -56,9 +56,9 @@ sudo ufw allow from 192.168.1.0/24 to 192.168.1.11 proto udp
 
 At this port, all cameras should be able to stream image to crtmpserver and the stream can be read with vlc. The link to stream has the this structure `rtsp://<server_address>:554/test<camera_mac_address>`. The camera mac address is the hex representation concatenated. ex: `rtsp://127.0.0.1:554/testB827EB3C6B0A`
 
-The ![IpDisco](https://github.com/smartsystemslab-uf/IpDisco-Prj) (Ip dicorvery module) module is a client-server module design to retrieved camera settings from the server side including the camera mac address to read the stream.
+The [IpDisco](https://github.com/smartsystemslab-uf/IpDisco-Prj) (Ip dicorvery module) module is a client-server module design to retrieved camera settings from the server side including the camera mac address to read the stream.
 
-More about ![UFW here](https://help.ubuntu.com/community/UFW).
+More about [UFW here](https://help.ubuntu.com/community/UFW).
 
 ## Install Ansible and sshpass
 ### Install ansible
