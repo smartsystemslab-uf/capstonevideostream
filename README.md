@@ -26,12 +26,14 @@
 `sudo ufw enable`
 
 ### Open the following TCP port using ufw
-`sudo ufw allow 554`
-`sudo ufw allow 1935`
-`sudo ufw allow 6666`
-`sudo ufw allow 6665`
-`sudo ufw allow 9999`
-`sudo ufw allow 8080`
+```
+sudo ufw allow 554
+sudo ufw allow 1935
+sudo ufw allow 6666
+sudo ufw allow 6665
+sudo ufw allow 9999
+sudo ufw allow 8080
+```
 
 To read to able stream from the server, some udp port should be opened. The only problem is that they are automatically generated. Two to allow these udp port using ufw.
 - The first approach which is safe, but tedious, consist in opening every single port manually. To get the list of port, run the following command:
@@ -42,7 +44,7 @@ To read to able stream from the server, some udp port should be opened. The only
 
 At this port, all cameras should be able to stream image to crtmpserver and the stream can be read with vlc. The link to stream has the this structure `rtsp://<server_address>:554/test<camera_mac_address>`. The camera mac address is the hex representation concatenated. ex: rtsp://127.0.0.1:554/testB827EB3C6B0A
 
-The ![IpDisco](http://dev.camertronix.com/Immersion-Grp/IpDisco-Prj) (Ip dicorvery module) module is a client-server module design to retrieved camera settings from the server side including the camera mac address to read the stream.
+The ![IpDisco](https://github.com/smartsystemslab-uf/IpDisco-Prj) (Ip dicorvery module) module is a client-server module design to retrieved camera settings from the server side including the camera mac address to read the stream.
 
 More about ![UFW here](https://help.ubuntu.com/community/UFW).
 
